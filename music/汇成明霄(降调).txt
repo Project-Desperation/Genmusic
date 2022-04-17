@@ -1,0 +1,17 @@
+0.7
+B=A=M=A+--=
+B=A=M=A+--=
+B=A=S=D-D-D-G-B-D-S+-
+O-=B=A=M=A-=A-D-Q-J-=H-=G+
+B=A=G-=F-=B-=D-=S+-
+O-O-A=M=A+O=B=B-A-G-G-=F-=D+
+Q=J=Q-=A-=S-D-F-D+-+
+G=H=G-+B-A-S-D-Q-J-Q+
+Q=W=Q-A=A-Z=Z-B=A=S=D=S+--=
+B=A=G=G+--=
+
+Z+-X+-C+-B+-Z+-X+-C+-B+-
+A+-S+-D+-G+-A+-S+-D+-G+-S
+Q-Q-Q=Q=Q-Q-Q=Q=
+Q-Q-Q=Q=Q-Q-Q=Q=
+Q+-+-A-
