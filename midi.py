@@ -169,12 +169,12 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--input', default='勾指起誓.mid', help='midi文件路径')
     parser.add_argument('--output', default='music\勾指起誓.txt', help='输出路径')
-    parser.add_argument('--start', type=int, default=51, help='低音do（原神按键Z）对应midi编号')
+    parser.add_argument('--start', type=int, default=48, help='低音do（原神按键Z）对应midi编号')
     parser.add_argument('--BPM', type=int, default=85, help='Beat Per Minute，每分钟节拍数')
     args = parser.parse_args()
 
     commands, header_info = parse_midi(args.input)
     res = to_genshin_commands(commands, header_info[2] / 2, start=args.start)
-    res = '{:.2f}\n'.format(30 / args.speed) + res
+    res = '{:.2f}\n'.format(30 / args.BPM) + res
     with open(args.output, 'w') as f:
         f.write(res)
