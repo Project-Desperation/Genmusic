@@ -8,7 +8,10 @@ default_key_dict = {0: 'Z', 2: 'X', 4: 'C', 5: 'V', 7: 'B', 9: 'N', 11: 'M',
                     12: 'A', 14: 'S', 16: 'D', 17: 'F', 19: 'G', 21: 'H', 23: 'J',
                     13: 'a', 15: 's', 18: 'f', 20: 'g', 22: 'h',
                     24: 'Q', 25: 'q', 26: 'W', 27: 'w', 28: 'E', 29: 'R', 30: 'r', 31: 'T', 32: 't', 33: 'Y', 34: 'y',
-                    35: 'U'}
+                    35: 'U',
+                    36: '1', 38: '2', 40: '3', 41: '4', 43: '5', 45: '6', 47: '7',
+                    37: '(', 39: ')', 42: "'", 44: '[', 46: ']',
+                    }
 
 
 def read_vlq(f):
@@ -171,10 +174,11 @@ if __name__ == '__main__':
     parser.add_argument('--output', default='music\勾指起誓.txt', help='输出路径')
     parser.add_argument('--start', type=int, default=48, help='低音do（原神按键Z）对应midi编号')
     parser.add_argument('--BPM', type=int, default=85, help='Beat Per Minute，每分钟节拍数')
+    parser.add_argument('--tracks', default='ALL', help='需要转换的音轨（默认全部）')
     args = parser.parse_args()
 
     commands, header_info = parse_midi(args.input)
-    res = to_genshin_commands(commands, header_info[2] / 2, start=args.start)
-    res = '{:.2f}\n'.format(30 / args.BPM) + res
+    res = to_genshin_commands(commands, header_info[2] / 2, start=args.start, tracks=eval(args.tracks))
+    res = '{:.5f}\n'.format(30 / args.BPM) + res
     with open(args.output, 'w') as f:
         f.write(res)
