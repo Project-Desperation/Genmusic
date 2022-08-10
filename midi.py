@@ -1,7 +1,13 @@
+"""
+写在前面的话：这不是个什么正经的工程项目，就是个小朋友的玩具，希望大家玩的开心
+B站uid：17890585，茶已备好，欢迎骚扰
+"""
+
 from struct import unpack
 from argparse import ArgumentParser
 
 commands = []
+qpMax = 3
 
 default_key_dict = {0: 'Z', 2: 'X', 4: 'C', 5: 'V', 7: 'B', 9: 'N', 11: 'M',
                     1: 'z', 3: 'x', 6: 'v', 8: 'b', 10: 'n',
@@ -9,6 +15,7 @@ default_key_dict = {0: 'Z', 2: 'X', 4: 'C', 5: 'V', 7: 'B', 9: 'N', 11: 'M',
                     13: 'a', 15: 's', 18: 'f', 20: 'g', 22: 'h',
                     24: 'Q', 25: 'q', 26: 'W', 27: 'w', 28: 'E', 29: 'R', 30: 'r', 31: 'T', 32: 't', 33: 'Y', 34: 'y',
                     35: 'U'}
+
 
 # 36: '1', 38: '2', 40: '3', 41: '4', 43: '5', 45: '6', 47: '7',
 # 37: '(', 39: ')', 42: "'", 44: '[', 46: ']',
@@ -129,7 +136,7 @@ def parse_midi(file):
 
 def calc_rest(delta_t, tick):
     res = ''
-    rest_type = '+-=.'
+    rest_type = '+-=.'[:qpMax]
     for i in range(len(rest_type)):
         tmp = int(delta_t / tick)
         res += rest_type[i] * tmp
@@ -158,10 +165,13 @@ def to_genshin_commands(commands, tick, tracks='ALL', key_dic=None, start=50):
         if key_dic.get(cmd[1] - start):
             res += key_dic[cmd[1] - start]
         else:
-            res += 'O'
+            # res += 'O'  # 如果某个音超过了原琴可以弹奏的范围，就用O代替
+            # 用O代替会增加额外的弹奏开销，直接忽略算了，诶嘿~
+            pass
         t = cmd[0]
-        # 转调特殊处理
+        # 转调特殊处理（开玩笑的这不是转调，但这琴没有黑键，就是在逼我挑战12平均律）
         # if res[-6:] == 'FRO+FR': start -= 2  # 紫罗兰
+        # if res[-4:] == 'Rfhz': start += 1  # 喜剧
         # if res[-8:] == 'AQO=.NHO':
         #     start -= 4
         #     print(len(res))
@@ -174,9 +184,12 @@ if __name__ == '__main__':
     parser.add_argument('--output', default='music\勾指起誓.txt', help='输出路径')
     parser.add_argument('--start', type=int, default=48, help='低音do（原神按键Z）对应midi编号')
     parser.add_argument('--BPM', type=int, default=85, help='Beat Per Minute，每分钟节拍数')
+    parser.add_argument('--qpMax', type=int, default=-1, help='最大量化')
     args = parser.parse_args()
 
     commands, header_info = parse_midi(args.input)
+    if args.qpMax > 0:
+        qpMax = args.qpMax
     res = to_genshin_commands(commands, header_info[2] / 2, start=args.start)
     res = '{:.5f}\n'.format(30 / args.BPM) + res
     with open(args.output, 'w') as f:
